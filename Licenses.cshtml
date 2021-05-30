@@ -42,67 +42,81 @@
 
         $request.done(function (response) {
             console.log(response);
-            // build table
-            document.getElementById("tableData").style.height = "500px";
-            // This doesn't work for some reason
-            /*document.getElementById("tableData").classList.add = "table";*/
-            var postcodeTable = document.createElement('table');
-            postcodeTable.classList.add("table-striped");
+            var postcodeTable = document.createElement('div');
             postcodeTable.id = "postcodeTable";
-            tableData.style = "overflow:scroll; max-height: 500px;";
 
-            // Table Header
-            var header = postcodeTable.createTHead();
-            var row = header.insertRow(0);
-            var cell = row.insertCell(0);
-            cell.innerHTML = "<h3><b>Postcodes</b></h3>";
-            header.style = "border: 2px solid black";
+            // Create header row from div
+            var headerRow = document.createElement('div');
+            headerRow.classList.add('row');
+            // Create Headers
+            var postcodeHeader = document.createElement('thead');
+            postcodeHeader.innerHTML = "<th>Postcode</th>";
+            postcodeHeader.classList.add("col-md-2");
 
+            var suburbHeader = document.createElement('thead');
+            suburbHeader.innerHTML = "<th>Suburbs</th>";
+            suburbHeader.classList.add("col-md-6");
+
+            var yearsHeader = document.createElement('thead');
+            yearsHeader.innerHTML = "<th>Years</th>";
+            yearsHeader.classList.add("col-md-4");
+
+            // Add headers to row
+            headerRow.appendChild(postcodeHeader);
+            headerRow.appendChild(suburbHeader);
+            headerRow.appendChild(yearsHeader);
+            postcodeTable.appendChild(headerRow);
+
+            postcodeTable.classList.add("table-bordered");
+            tableData.style = "overflow:scroll; max-height: 500px; ";
+                        
 
             for (var i = 0; i < response.length; i++) {
-                var tr1 = document.createElement('tr');
-                var td1 = document.createElement('td');
+                // Column 1 - Postcodes
+                var tr1 = document.createElement('div');
+                var td1 = document.createElement('div');
+                tr1.classList.add("row");
+                td1.classList.add("col-md-2");
+                td1.style = "overflow:auto";
+                tr1.style = "overflow:auto";
                 var postcodeData = document.createTextNode(JSON.stringify(response[i].postcode));
 
                 td1.appendChild(postcodeData);
                 tr1.appendChild(td1);
-                tr1.style = "border: 1px solid black";
                 postcodeTable.appendChild(tr1);
+
+                // Column 2 - Suburbs
+                var td2 = document.createElement('div');
+                td2.classList.add("col-md-6");
+                td2.style = "overflow:auto";
+                var suburbsData = document.createTextNode(JSON.stringify(response[i].suburbs));
+                td2.appendChild(suburbsData);
+                tr1.appendChild(td2);
+                postcodeTable.appendChild(tr1);
+
+                // Column 2 - Years
+                var td3 = document.createElement('div');
+                td3.classList.add("col-md-4");
+                td3.style = "overflow:auto";
+                var yearsBtn = document.createElement("button");
+                yearsBtn.innerHTML = JSON.stringify(response[i].years);
+                td3.appendChild(yearsBtn);
+                tr1.appendChild(td3);
             }
 
-            for (var i = 0; i < response.length; i++) {
-                var tr2 = document.createElement('tr');
-                var td2 = document.createElement('td');
-                var yearsData = document.createTextNode(JSON.stringify(response[i].suburbs));
-
-                td2.appendChild(yearsData);
-                tr2.appendChild(td2);
-                tr2.style = "border: 1px solid black";
-                postcodeTable.appendChild(tr2);
-            }
-
-            for (var i = 0; i < response.length; i++) {
-                var tr3 = document.createElement('tr');
-                var td3 = document.createElement('td');
-                var yearsBtn1 = document.createElement("button");
-                yearsBtn1.innerHTML = JSON.stringify(response[i].years);
-                
-                td3.appendChild(yearsBtn1);
-                tr3.appendChild(td3);
-                tr3.style = "border: 1px solid black";
-                postcodeTable.appendChild(tr3);
-            }
-
-
-
+            postcodeTable.appendChild(tr1);
 
             document.div; tableData.appendChild(postcodeTable);
-            // add button click event to call your graph building function passing postcode + year as parameters
 
         });
 
 
+
+
+                                                                                                                                // add button click event to call your graph building function passing postcode + year as parameters
+
+
+
+
     </script>
 }
-
-
