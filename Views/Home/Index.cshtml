@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@section styles {
+    <style>
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            Firstly complete the table of postcodes and associated suburbs by loading the data making an Ajax request to the first web api Url: <b>api/SADriversWebAPI</b>.<br />  An example of the Json data returned can be found in the ExampleJson/1_BuildTable.json file.
+            <span style="color:darkred">Throught this assignment you are not allowed to use this data for element ID's or class names!</span>
+        </p>
+        <p>@Html.ActionLink("View SA Driver Data", "Licenses", "Home", null, new { @class = "btn btn-secondary" })</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Selecting a postcode/suburb and year</h2>
+        <p>
+            Clicking on an given year for a postcode will produce a Driver Lisences graph showing a quaterly breakdown of license numbers by Female, Male, Not Listed and  Gender-x for the selected postcode and year. This graph must be generated using Ajax data from the <b>SADriversWebAPI Controller</b>.  This can be achieved by making an Ajax request to the same Url with year and postcodes as querystring values: <b>api/SADriversWebAPI?postcode=5000&year=2020</b>. An example of the Json data returned can be found in the ExampleJson/2_BuildGraph.json file.<br />
+            The graph <b>must</b> be generated using <b>JQuery</b> or <b>D3 v5.9.x+</b> and include the gender + count detail (quater, gender,  count, year etc).  Both JavaScript libraries have already been included for you.<br />
+            See the assignment documentation for details
+        </p>
+        <p>@Html.ActionLink("View SA Driver Data", "Licenses", "Home", null, new { @class = "btn btn-secondary" })</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Selecting a Graph quater and gender</h2>
+        <p>
+            Selecting a gender from one of the quaters graphed will load a new table below the graph showing the count of drivers licenses for various age groups of the selected quater.<br />This can be achieved by requesting the Url with year,postcode, gender and quater as querystring values: <b>api/SADriversWebAPI?postcode=5000&year=2020&gender=female&quater=q1</b>.<br />
+            This table will also need to be generated using Ajax and <b>JQuery()</b> or <b>D3 v5.9.x+</b>, and include the expiation detail (code, description, avg fine, avg speed and ticket count) <br />
+        </p>
+        <p>@Html.ActionLink("View SA Driver Data", "Licenses", "Home", null, new { @class = "btn btn-secondary" })</p>
+
+    </div>
+</div>

@@ -1,0 +1,80 @@
+﻿
+
+@section styles {
+    @*you can temporarily put your embedded styles here
+        later you can move them to the Site.css file found in the Content folder *@
+
+    <style>
+    </style>
+
+}
+<div class="jumbotron">
+    <h2 class="text-center">SA Driver Licenses Data By Postcode</h2>
+</div>
+<div class="row">
+    <div class="col-5" id="tableData">
+        <!-- Do NOT Edit this HTML -->
+    </div>
+    <div class="col-7">
+        <div class="row">
+
+            <div class="col-12" id="graphData">
+                <p class="text-center">Select a suburb to continue...</p>
+                <!-- Do NOT Edit this HTML -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        // write your JQuery or D3v5.9.x code here initially
+        // 1. generate the table
+        // 2. generate the graph
+        // 3. generate the details table
+
+        var $request = $.ajax({
+            method: "get",
+            url: "/api/sadriverswebapi",
+            timeout: 5000
+        })
+
+        $request.done(function (response) {
+            console.log(response);
+            // build table
+            document.getElementById("tableData").classList.add('overflow:scroll');
+            document.getElementById("tableData").style.height = "500px";
+
+            var postcodeTable = document.createElement('table');
+            postcodeTable.id = "postcodeTable";
+            postcodeTable.style = "overflow:hidden; max-height: 500px;";
+
+            //var th = document.createElement('th');
+            //th.innerHTML = "Postcode";
+
+            //document.getElementById("postcodeTable").appendChild(th);
+
+            for (var i = 1; i < response.length; i++) {
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var postcodeData = document.createTextNode(JSON.stringify($request.postcode));
+                
+                td1.appendChild(postcodeData);
+                tr.appendChild(td1);
+                /*th.appendChild(tr);*/
+                postcodeTable.appendChild(tr);
+            }
+
+
+
+            document.div; tableData.appendChild(postcodeTable);
+            // add button click event to call your graph building function passing postcode + year as parameters
+
+        });
+
+
+    </script>
+}
+
+
