@@ -1,0 +1,124 @@
+﻿
+
+@section styles {
+    @*you can temporarily put your embedded styles here
+        later you can move them to the Site.css file found in the Content folder *@
+
+    <style>
+    </style>
+
+}
+<div class="jumbotron">
+    <h2 class="text-center">SA Driver Licenses Data By Postcode</h2>
+</div>
+<div class="row">
+    <div class="col-5" id="tableData">
+        <!-- Do NOT Edit this HTML -->
+    </div>
+    <div class="col-7">
+        <div class="row">
+
+            <div class="col-12" id="graphData">
+                <p class="text-center">Select a suburb to continue...</p>
+                <!-- Do NOT Edit this HTML -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        // write your JQuery or D3v5.9.x code here initially
+        // 1. generate the table
+        // 2. generate the graph
+        // 3. generate the details table
+
+        var $request = $.ajax({
+            method: "get",
+            url: "/api/sadriverswebapi",
+            timeout: 5000
+        })
+
+        $request.done(function (response) {
+            console.log(response);
+            // build table
+            document.getElementById("tableData").style.height = "500px";
+            // This doesn't work for some reason
+            /*document.getElementById("tableData").classList.add = "table";*/
+            var postcodeTable = document.createElement('table');
+            postcodeTable.classList.add("table-striped");
+            postcodeTable.id = "postcodeTable";
+            tableData.style = "overflow:scroll; max-height: 500px; ";
+
+            // Postcodes Header
+            var headerPostcode = postcodeTable.createTHead();
+            var row = headerPostcode.insertRow(0);
+            var postcodeCell = row.insertCell(0);
+            postcodeCell.innerHTML = "<h3><b>Postcodes</b></h3>";
+            headerPostcode.style = "border: 2px solid black";
+            postcodeCell.bgColor = "gainsboro";
+
+            // Suburbs Header
+            var headerSuburbs = postcodeTable.createTHead();
+            var suburbsCell = row.insertCell(1);
+            suburbsCell.innerHTML = "<h3><b>Suburbs</b></h3>";
+            suburbsCell.style = "border: 2px solid black";
+            suburbsCell.bgColor = "gainsboro";
+            /*suburbsCell.bgColor = "grey";*/
+
+
+            // Years Header
+            var headerYears = postcodeTable.createTHead();
+            var yearsCell = row.insertCell(2);
+            yearsCell.innerHTML = "<h3><b>Years</b></h3>";
+            yearsCell.style = "border: 2px solid black; bg-color: dark";
+            yearsCell.bgColor = "gainsboro";
+
+            for (var i = 0; i < response.length; i++) {
+                // Column 1 - Postcodes
+                var tr1 = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var postcodeData = document.createTextNode(JSON.stringify(response[i].postcode));
+
+                td1.appendChild(postcodeData);
+                tr1.appendChild(td1);
+                postcodeTable.appendChild(tr1);
+
+                // Column 2 - Suburbs
+                var td2 = document.createElement('td');
+                var suburbsData = document.createTextNode(JSON.stringify(response[i].suburbs));
+                td2.appendChild(suburbsData);
+                tr1.appendChild(td2);
+                postcodeTable.appendChild(tr1);
+
+                // Column 2 - Years
+                var td3 = document.createElement('td');
+                var yearsBtn = document.createElement("button");
+                yearsBtn.innerHTML = JSON.stringify(response[i].years);
+                td3.appendChild(yearsBtn);
+                tr1.appendChild(td3);
+                tr1.style = "border: 1px solid black";
+                td2.style = "border: 1px solid black";
+                td3.style = "border: 1px solid black";
+            }
+            
+            postcodeTable.appendChild(tr1);
+
+
+            document.div; tableData.appendChild(postcodeTable);
+
+        });
+
+
+
+
+                                                                    // add button click event to call your graph building function passing postcode + year as parameters
+
+
+
+
+    </script>
+}
+
+
