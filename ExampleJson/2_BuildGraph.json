@@ -1,0 +1,94 @@
+[
+  {
+    "quater": "Q1        ",
+    "count": 115,
+    "genderCounts": [
+      {
+        "gender": "Female",
+        "count": 52
+      },
+      {
+        "gender": "Male",
+        "count": 60
+      },
+      {
+        "gender": "Gender X",
+        "count": 0
+      },
+      {
+        "gender": "Not Listed",
+        "count": 3
+      }
+    ],
+    "maxCount": 60
+  },
+  {
+    "quater": "Q2        ",
+    "count": 116,
+    "genderCounts": [
+      {
+        "gender": "Female",
+        "count": 52
+      },
+      {
+        "gender": "Male",
+        "count": 60
+      },
+      {
+        "gender": "Gender X",
+        "count": 0
+      },
+      {
+        "gender": "Not Listed",
+        "count": 4
+      }
+    ],
+    "maxCount": 60
+  },
+  {
+    "quater": "Q3        ",
+    "count": 118,
+    "genderCounts": [
+      {
+        "gender": "Female",
+        "count": 56
+      },
+      {
+        "gender": "Male",
+        "count": 58
+      },
+      {
+        "gender": "Gender X",
+        "count": 0
+      },
+      {
+        "gender": "Not Listed",
+        "count": 4
+      }
+    ],
+    "maxCount": 58
+  },
+  {
+    "quater": "Q4        ",
+    "count": 119,
+    "genderCounts": [
+      {
+        "gender": "Female",
+        "count": 56
+      },
+      {
+        "gender": "Male",
+        "count": 58
+      },
+      {
+        "gender": "Gender X",
+        "count": 0
+      },
+      {
+        "gender": "Not Listed",
+        "count": 5
+      }
+    ],
+    "maxCount": 58
+  }
+]

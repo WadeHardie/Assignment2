@@ -1,0 +1,74 @@
+[
+  {
+    "postcode": "0872",
+    "years": [
+      {
+        "year": 2020,
+        "records": 468
+      },
+      {
+        "year": 2019,
+        "records": 477
+      },
+      {
+        "year": 2018,
+        "records": 463
+      }
+    ],
+    "suburbs": [
+      "ANANGU PITJANTJATJARA YANKUNYTJATJARA",
+      "AYERS RANGE SOUTH",
+      "DE ROSE HILL",
+      "ERNABELLA",
+      "ERNABELLA (PUKATJA)",
+      "FREGON",
+      "INDULKANA"
+    ]
+  },
+  {
+    "postcode": "5000",
+    "years": [
+      {
+        "year": 2018,
+        "records": 638
+      },
+      {
+        "year": 2020,
+        "records": 663
+      },
+      {
+        "year": 2019,
+        "records": 654
+      }
+    ],
+    "suburbs": [
+      "ADELAIDE",
+      "ADELAIDE BC",
+      "CITY WEST CAMPUS",
+      "HALIFAX STREET",
+      "HUTT STREET",
+      "PARLIAMENT HOUSE",
+      "RUNDLE MALL",
+      "STATION ARCADE",
+      "STURT STREET"
+    ]
+  },
+  {
+    "postcode": "5001",
+    "years": [
+      {
+        "year": 2020,
+        "records": 530
+      },
+      {
+        "year": 2018,
+        "records": 518
+      },
+      {
+        "year": 2019,
+        "records": 529
+      }
+    ],
+    "suburbs": [ "ADELAIDE" ]
+  }
+]
