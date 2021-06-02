@@ -1,0 +1,32 @@
+﻿
+
+.jumbotron {
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.buttonYears {
+    margin: 1px;
+}
+
+.tooltip-box { /* Container for our tooltip */
+    position: relative;
+    display: inline-block;
+}
+
+    .tooltip-box .tooltip-box-text { /* This is for the tooltip text */
+        visibility: hidden;
+        width: 200px;
+        background-color: dimgrey;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        border-radius: 50px; /* This defines tooltip text position */
+        position: absolute;
+        z-index: 1;
+        right: 75px;
+    }
+
+    .tooltip-box:hover .tooltip-box-text { /* Makes tooltip text visible when text is hovered on */
+        visibility: visible;
+    }
