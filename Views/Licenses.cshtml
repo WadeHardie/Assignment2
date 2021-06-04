@@ -28,6 +28,10 @@
 
 @section scripts {
     <script>
+
+
+
+
         // write your JQuery or D3v5.9.x code here initially
         // 1. generate the table
         // 2. generate the graph
@@ -37,8 +41,27 @@
             url: "/api/sadriverswebapi",
             timeout: 5000
         })
+
+        $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+            alert("Oops, data has failed to load.");
+        });
+
+
+
         $request.done(function (response) {
-            console.log(response);
+            // Create div container to house graph elements
+            $('<div/>', {
+                id: 'graphContainer',
+                "class": 'testBorder',
+                title: 'TEST DIV'
+            }).appendTo('#graphData');
+
+            $('<h1/>', {
+                id: 'headerTEST',
+                "class": 'testBorder',
+                title: 'TEST DIV',
+                text: "Some text",
+            }).appendTo('#graphContainer');
 
             // build table
             document.getElementById("tableData").style.height = "500px";
@@ -50,23 +73,21 @@
             tableData.style = "overflow:scroll; max-height: 500px";
 
             // Postcodes Header
-            var headerPostcode = postcodeTable.createTHead();
-            var row = headerPostcode.insertRow(0);
-            var postcodeCell = row.insertCell(0);
-            postcodeCell.innerHTML = "<h3><b>Postcodes</b></h3>";
-
+            var headerRow = postcodeTable.createTHead();
+            var headerPostcode = document.createElement('th');
+            headerPostcode.innerHTML = "<h3><b>Postcodes</b></h3>";
+            headerRow.appendChild(headerPostcode);
 
             // Suburbs Header
-            var headerSuburbs = postcodeTable.createTHead();
-            var suburbsCell = row.insertCell(1);
-            suburbsCell.innerHTML = "<h3><b>Suburbs</b></h3>";
-
+            var headerSuburbs = document.createElement('th');
+            headerSuburbs.innerHTML = "<h3><b>Suburbs</b></h3>";
+            headerSuburbs.style = ("max-width: 200px");
+            headerRow.appendChild(headerSuburbs);
 
             // Years Header
-            var headerYears = postcodeTable.createTHead();
-            var yearsCell = row.insertCell(2);
-            yearsCell.innerHTML = "<h3><b>Years</b></h3>";
-
+            var headerYears = document.createElement('th');
+            headerYears.innerHTML = "<h3><b>Years</b></h3>";
+            headerRow.appendChild(headerYears);
 
             // Create Tbody for the Striped Table
             var tbodyTable = postcodeTable.createTBody();
@@ -77,17 +98,17 @@
                 // Column 1 - Postcodes
                 var tr1 = document.createElement('tr');
                 var td1 = document.createElement('td');
-                td1.classList.add("col-md-1");
-                var postcodeData = document.createTextNode(JSON.stringify(response[i].postcode));
-                td1.appendChild(postcodeData);
+
+                // COPY THIS FOR ALL APPEND TO ROW
+                td1.append(response[i].postcode);
                 tr1.appendChild(td1);
+                // END COPY
                 tbodyTable.appendChild(tr1);
 
                 // Column 2 - Suburbs
                 var td2 = document.createElement('td');
-                td2.classList.add("col-md-1");
-                var suburbsData = document.createTextNode(JSON.stringify(response[i].suburbs));
-                td2.appendChild(suburbsData);
+                td2.classList.add("text-wrap");
+                td2.append(response[i].suburbs);
                 tr1.appendChild(td2);
                 tbodyTable.appendChild(tr1);
 
@@ -95,50 +116,47 @@
                 var td3 = document.createElement('td');
 
                 // Button creation for loop
-                for (var j = 0; j < response.length; j++) {
+                for (var j = 0; j < response[i].years.length; j++) {
                     //Create Button and Style
+                    // Div container for tooltip and button
+                    var tooltipBox = document.createElement("div");
+                    tooltipBox.classList.add("tooltip-box");
+
+                    //Span for storing tooltip text
+                    var yearsBtnTooltipSpan = document.createElement("span");
+                    tooltipBox.appendChild(yearsBtnTooltipSpan);
+                    yearsBtnTooltipSpan.innerHTML = "View annual drivers’ license graph for " + response[i].years[j].year;
+                    yearsBtnTooltipSpan.classList.add("tooltip-box-text");
+
+                    //Button creation
                     var yearsBtn = document.createElement("button");
+                    yearsBtn.id = ("yearsRecordsButton");
                     yearsBtn.classList.add("btn");
                     yearsBtn.classList.add("btn-info", "buttonYears");
                     yearsBtn.style = ("border: solid white 1px");
 
-                    // Tooltip div, might delete later
-                    var toolTipElem = document.createElement("div");
-                    toolTipElem.classList.add("tooltip");
-                    toolTipElem.innerHTML = "Hello World";
+                    // generate Data
 
+                    
                     // JSON to Button
-                    yearsBtn.innerHTML = JSON.stringify(response[i].years[j]);
+                    yearsBtn.append((response[i].years[j].year) + (" [") + (response[i].years[j].records) + ("] Records."));
+                   /* $('#yearsRecordsButton').on('click', generateGraph);*/
 
-                    if (response[i].years[j] == undefined) {
-                        break
-                    };
-
-                    // On hover events added to button
-                    yearsBtn.onmouseover = function showElement(toolTipElem = {}) {
-                        toolTipElem.style.display = "block";
-                    };
-                    yearsBtn.onmouseout = function hideElement(toolTipElem = {}) {
-                        toolTipElem.style.display = " ";
-                    };
-
-                    td3.appendChild(toolTipElem);
-                    td3.appendChild(yearsBtn);
+                    // Add all new elements to the table cell
+                    td3.appendChild(tooltipBox);
+                    tooltipBox.appendChild(yearsBtn);
                     tr1.appendChild(td3);
 
+                    
                 }
 
             }
 
-            function hideElement(elem) {
-                elem.style.display = "none";
-            }
-            // end new code
-
             postcodeTable.appendChild(tr1);
             document.div; tableData.appendChild(postcodeTable);
+
         });
-                                                                                                                                                        // add button click event to call your graph building function passing postcode + year as parameters
+                                                                                                                                                                                                                                // add button click event to call your graph building function passing postcode + year as parameters
     </script>
 }
 
