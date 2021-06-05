@@ -8,6 +8,8 @@
     </style>
 
 }
+
+
 <div class="jumbotron">
     <h2 class="text-center">SA Driver Licenses Data By Postcode</h2>
 </div>
@@ -31,7 +33,6 @@
 
 
 
-
         // write your JQuery or D3v5.9.x code here initially
         // 1. generate the table
         // 2. generate the graph
@@ -42,9 +43,21 @@
             timeout: 5000
         })
 
-        $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
-            alert("Oops, data has failed to load.");
+        $($request).ajaxError(function (event, jqxhr, settings, thrownError) {
+            alert("request AJAX error.");
         });
+
+        $(document).ready(function () {
+            function generateGraph(postcodeParam, yearsParam) {
+                alert(postcodeParam, yearsParam);
+            }
+            $('.buttonYears').click(function (postcodeParam, yearsParam) {
+                generateGraph(postcodeParam, yearsParam);
+            });
+        });
+
+
+
 
 
 
@@ -56,17 +69,11 @@
                 title: 'TEST DIV'
             }).appendTo('#graphData');
 
-            $('<h1/>', {
-                id: 'headerTEST',
-                "class": 'testBorder',
-                title: 'TEST DIV',
-                text: "Some text",
-            }).appendTo('#graphContainer');
 
             // build table
             document.getElementById("tableData").style.height = "500px";
 
-            // This doesn't work for some reason
+            // Create Table Elements
             var postcodeTable = document.createElement('table');
             postcodeTable.classList.add("table", "table-striped", "table-hover", "table-bordered");
             postcodeTable.id = "postcodeTable";
@@ -93,16 +100,22 @@
             var tbodyTable = postcodeTable.createTBody();
             postcodeTable.appendChild(tbodyTable);
 
+            // Arrays for Storing data for graph AJAX Call + Button ID index
+            var postcodeArray = [];
+            var yearsArray = [];
+            var btnIDIndex = 0;
+
             for (var i = 0; i < response.length; i++) {
 
                 // Column 1 - Postcodes
                 var tr1 = document.createElement('tr');
                 var td1 = document.createElement('td');
 
-                // COPY THIS FOR ALL APPEND TO ROW
+                // APPEND Postcode TD1 to ROW
                 td1.append(response[i].postcode);
                 tr1.appendChild(td1);
-                // END COPY
+                td1.id = response[i].postcode;
+
                 tbodyTable.appendChild(tr1);
 
                 // Column 2 - Suburbs
@@ -130,33 +143,124 @@
 
                     //Button creation
                     var yearsBtn = document.createElement("button");
-                    yearsBtn.id = ("yearsRecordsButton");
+                    yearsBtn.id = btnIDIndex;
+                    btnIDIndex++;
+
+                    // Apply Classes and Styles to Buttons
                     yearsBtn.classList.add("btn");
                     yearsBtn.classList.add("btn-info", "buttonYears");
                     yearsBtn.style = ("border: solid white 1px");
 
-                    // generate Data
+                    // Create objects to push to array
+                    var postcodeParameter = response[i].postcode;
+                    var yearParameter = response[i].years[j].year;
 
-                    
+                    // Push to postcode and years array
+                    postcodeArray.push(postcodeParameter);
+                    yearsArray.push(yearParameter);
+
+
                     // JSON to Button
                     yearsBtn.append((response[i].years[j].year) + (" [") + (response[i].years[j].records) + ("] Records."));
-                   /* $('#yearsRecordsButton').on('click', generateGraph);*/
+
 
                     // Add all new elements to the table cell
                     td3.appendChild(tooltipBox);
                     tooltipBox.appendChild(yearsBtn);
                     tr1.appendChild(td3);
 
-                    
+
                 }
 
             }
-
+            //console.log(yearsArray);
+            //console.log(postcodeArray);
             postcodeTable.appendChild(tr1);
             document.div; tableData.appendChild(postcodeTable);
 
+            $(".btn").each(function () {
+                $(this).click(function () {
+
+                    var $buildGraphRequest = $.ajax({
+                        method: "get",
+                        url: "/api/SADriversWebAPI?postcode=" + postcodeArray[$(this).attr("id")] + "&year=" + yearsArray[$(this).attr("id")],
+                        timeout: 5000,
+                    })
+
+                    var headingForGraph = document.createElement('div');
+                    headingForGraph.innerHTML = "<h1>License Data For " + postcodeArray[$(this).attr("id")] + " in the Year: " + yearsArray[$(this).attr("id")] + "</h1 >";
+                    $('#graphData').append(headingForGraph);
+
+                    $buildGraphRequest.done(function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            var quaterContainer = document.createElement('div');
+                            $(quaterContainer).addClass("testBorder");
+                            $(quaterContainer).appendTo('#graphData');
+                            $(quaterContainer).append('<div><b><label for="barGraph">' + response[i].quater + '</label></b></div>');
+
+                            // Variable to store the value for the largest Div
+                            var largestCount = 0;
+                            for (var k = 0; k <= 3; k++) {
+                                if (response[i].genderCounts[k].count > largestCount) {
+                                    largestCount = response[i].genderCounts[k].count;
+                                }
+                                
+                            }
+
+                            
+
+                            //Generate Graphs for each quarter
+                            for (var k = 0; k <= 3; k++) {
+                                var dataBar = document.createElement('div');
+                                $(dataBar).append('<b><h6>' + response[i].genderCounts[k].gender + ": " + response[i].genderCounts[k].count + '</h6></b>');
+                                $(dataBar).id = (k);
+                                $(dataBar).appendTo(quaterContainer);
+
+                                // Div length assigner
+                                if (response[i].genderCounts[k].count == largestCount) {
+                                    largestCount = response[i].genderCounts[k].count;
+                                    $(dataBar).addClass('largestBarWidth');
+                                } else {
+                                    var newWidthCalc = response[i].genderCounts[k].count;
+                                    newWidthCalc = newWidthCalc / largestCount;
+                                    newWidthCalc = newWidthCalc * 100;
+                                    newWidthCalc = newWidthCalc + "%";
+
+                                    console.log(newWidthCalc);
+                                    $(dataBar).addClass('subBarWidth');
+                                    $(dataBar).css("width", "!important", newWidthCalc);
+                                }
+
+                                switch (response[i].genderCounts[k].gender) {
+                                    case "Female":
+                                        dataBar.style = ("background-color: MistyRose");
+                                        break;
+                                    case "Male":
+                                        dataBar.style = ("background-color: PaleTurquoise");
+                                        break;
+                                    case "Gender X":
+                                        dataBar.style = ("background-color: BurlyWood");
+                                        break;
+                                    case "Not Listed":
+                                        dataBar.style = ("background-color: Gainsboro");
+                                        break;
+                                }
+
+
+                            }
+                            
+                            //largestCount = 0;
+                        };
+                    })
+
+                })
+            })
+
+
+
         });
-                                                                                                                                                                                                                                // add button click event to call your graph building function passing postcode + year as parameters
+
+
     </script>
 }
 
