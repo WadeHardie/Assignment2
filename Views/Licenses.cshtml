@@ -31,12 +31,6 @@
 @section scripts {
     <script>
 
-
-
-        // write your JQuery or D3v5.9.x code here initially
-        // 1. generate the table
-        // 2. generate the graph
-        // 3. generate the details table
         var $request = $.ajax({
             method: "get",
             url: "/api/sadriverswebapi",
@@ -44,7 +38,7 @@
         })
 
         $($request).ajaxError(function (event, jqxhr, settings, thrownError) {
-            alert("request AJAX error.");
+            alert("$request AJAX error.");
         });
 
         $(document).ready(function () {
@@ -57,27 +51,13 @@
         });
 
 
-
-
-
-
         $request.done(function (response) {
-            // Create div container to house graph elements
-            $('<div/>', {
-                id: 'graphContainer',
-                "class": 'testBorder',
-                title: 'TEST DIV'
-            }).appendTo('#graphData');
-
-
-            // build table
-            document.getElementById("tableData").style.height = "500px";
 
             // Create Table Elements
             var postcodeTable = document.createElement('table');
             postcodeTable.classList.add("table", "table-striped", "table-hover", "table-bordered");
             postcodeTable.id = "postcodeTable";
-            tableData.style = "overflow:scroll; max-height: 500px";
+            tableData.style = "overflow:scroll; max-height: 700px";
 
             // Postcodes Header
             var headerRow = postcodeTable.createTHead();
@@ -173,8 +153,7 @@
                 }
 
             }
-            //console.log(yearsArray);
-            //console.log(postcodeArray);
+
             postcodeTable.appendChild(tr1);
             document.div; tableData.appendChild(postcodeTable);
 
@@ -186,6 +165,9 @@
                         url: "/api/SADriversWebAPI?postcode=" + postcodeArray[$(this).attr("id")] + "&year=" + yearsArray[$(this).attr("id")],
                         timeout: 5000,
                     })
+                    $($buildGraphRequest).ajaxError(function (event, jqxhr, settings, thrownError) {
+                        alert("$buildGraphRequest AJAX error.");
+                    });
 
                     var headingForGraph = document.createElement('div');
                     headingForGraph.innerHTML = "<h1>License Data For " + postcodeArray[$(this).attr("id")] + " in the Year: " + yearsArray[$(this).attr("id")] + "</h1 >";
@@ -204,52 +186,62 @@
                                 if (response[i].genderCounts[k].count > largestCount) {
                                     largestCount = response[i].genderCounts[k].count;
                                 }
-                                
-                            }
 
-                            
+                            }
 
                             //Generate Graphs for each quarter
                             for (var k = 0; k <= 3; k++) {
                                 var dataBar = document.createElement('div');
-                                $(dataBar).append('<b><h6>' + response[i].genderCounts[k].gender + ": " + response[i].genderCounts[k].count + '</h6></b>');
+                                $(dataBar).append('<b><h6">' + response[i].genderCounts[k].gender + ": " + response[i].genderCounts[k].count + '</h6></b>');
                                 $(dataBar).id = (k);
                                 $(dataBar).appendTo(quaterContainer);
+
+                                switch (response[i].genderCounts[k].gender) {
+                                    case "Female":
+                                        dataBar.classList.add('femaleColor');
+                                        dataBar.style = ("width:" + newWidthCalc);
+                                        /*dataBar.style = ("background-color: MistyRose", "width:" + newWidthCalc);*/
+                                        break;
+                                    case "Male":
+                                        dataBar.classList.add('maleColor');
+                                        dataBar.style = ("width:" + newWidthCalc);
+                                        /*dataBar.style = ("background-color: PaleTurquoise", "width:" + newWidthCalc);*/
+                                        break;
+                                    case "Gender X":
+                                        dataBar.classList.add('genderXColor');
+                                        dataBar.style = ("width:" + newWidthCalc);
+                                        /*dataBar.style = ("background-color: BurlyWood", "width:" + newWidthCalc);*/
+                                        break;
+                                    case "Not Listed":
+                                        /*dataBar.style = ("background-color: Gainsboro");*/
+                                        dataBar.classList.add('notListedColor');
+                                        dataBar.style = ("width:" + newWidthCalc);
+                                        break;
+                                }
 
                                 // Div length assigner
                                 if (response[i].genderCounts[k].count == largestCount) {
                                     largestCount = response[i].genderCounts[k].count;
                                     $(dataBar).addClass('largestBarWidth');
+                                    dataBar.style = ("width:100%");
+                                    $(dataBar).attr('title', 'Click to view license summary for year');
                                 } else {
                                     var newWidthCalc = response[i].genderCounts[k].count;
                                     newWidthCalc = newWidthCalc / largestCount;
                                     newWidthCalc = newWidthCalc * 100;
                                     newWidthCalc = newWidthCalc + "%";
 
+                                    dataBar.style = ("width:" + newWidthCalc);
+                                    $(dataBar).attr('title', 'Click to view license summary for year');
                                     console.log(newWidthCalc);
-                                    $(dataBar).addClass('subBarWidth');
-                                    $(dataBar).css("width", "!important", newWidthCalc);
                                 }
 
-                                switch (response[i].genderCounts[k].gender) {
-                                    case "Female":
-                                        dataBar.style = ("background-color: MistyRose");
-                                        break;
-                                    case "Male":
-                                        dataBar.style = ("background-color: PaleTurquoise");
-                                        break;
-                                    case "Gender X":
-                                        dataBar.style = ("background-color: BurlyWood");
-                                        break;
-                                    case "Not Listed":
-                                        dataBar.style = ("background-color: Gainsboro");
-                                        break;
-                                }
+
 
 
                             }
-                            
-                            //largestCount = 0;
+
+
                         };
                     })
 
